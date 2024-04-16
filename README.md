@@ -2,10 +2,8 @@
 
 Lightweight generic configuration package for normal human beings that is ready to go.
 
-
-
-
-
+[![Go Reference](https://pkg.go.dev/badge/github.com/cdfmlr/configer.svg)](https://pkg.go.dev/github.com/cdfmlr/configer)
+[![Go Report Badge](https://goreportcard.com/badge/github.com/cdfmlr/configer)](https://goreportcard.com/report/github.com/cdfmlr/configer)
 
 ## Getting Started
 
@@ -89,6 +87,8 @@ Output:
 ```bash
 AppConfig: Version=1.0.0, len(BackendServices)=2, DB.Auth.User=root
 ```
+
+Click [here](https://pkg.go.dev/github.com/cdfmlr/configer) to see the full documentation.
 
 ## Motivation & Philosophy
 
