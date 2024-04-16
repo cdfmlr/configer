@@ -1,4 +1,4 @@
-package config
+package configer
 
 import (
 	"bytes"
@@ -90,7 +90,7 @@ func TestConfiger_Read(t *testing.T) {
 
 		buf := []byte(test.data)
 
-		err := NewConfiger(&c, test.encoding).Read(bytes.NewReader(buf))
+		err := New(&c, test.encoding).Read(bytes.NewReader(buf))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -116,7 +116,7 @@ func TestConfiger_Write(t *testing.T) {
 
 		var buf bytes.Buffer
 
-		err := NewConfiger(&c, test.encoding).Write(&buf)
+		err := New(&c, test.encoding).Write(&buf)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -182,7 +182,7 @@ User = "root"
 Password = "pswd123"
 `
 
-	configer := NewConfiger(&Config, TOML)
+	configer := New(&Config, TOML)
 
 	if err := configer.Read(strings.NewReader(tomlData)); err != nil {
 		panic(err)
@@ -213,7 +213,7 @@ func ExampleConfiger_Write() {
 		},
 	}
 
-	configer := NewConfiger(&Config, JSON)
+	configer := New(&Config, JSON)
 
 	var buf bytes.Buffer
 

@@ -1,4 +1,4 @@
-# config
+# configer
 
 Lightweight generic configuration package for normal human beings that is ready to go.
 
@@ -12,7 +12,7 @@ Lightweight generic configuration package for normal human beings that is ready 
 Install the package to your go module:
 
 ```bash
-go get github.com/cdfmlr/config
+go get github.com/cdfmlr/configer
 ```
 
 Define a struct to hold the configuration and load it from a file:
@@ -22,7 +22,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/cdfmlr/config"
+	"github.com/cdfmlr/configer"
 	"time"
 )
 
@@ -43,7 +43,7 @@ type appConfig struct {
 var AppConfig appConfig
 
 func main() {
-	err := config.NewConfiger(&AppConfig, config.TOML).ReadFromFile("./config.toml")
+	err := configer.New(&AppConfig, configer.TOML).ReadFromFile("./config.toml")
 
 	if err != nil {
 		panic("Failed to read config file: " + err.Error())

@@ -1,4 +1,4 @@
-module github.com/cdfmlr/config
+module github.com/cdfmlr/configer
 
 go 1.21.5
 

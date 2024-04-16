@@ -1,4 +1,4 @@
-package config
+package configer
 
 import (
 	"io"
@@ -6,7 +6,11 @@ import (
 )
 
 // Object is a configuration definition.
-// Any
+//
+// Configer binds the configuration to this object.
+//
+// Any type can be used as a configuration object as long as it is serializable.
+// It is typically a struct.
 type Object = any
 
 // Configer is a generic configuration reader and writer.
@@ -21,11 +25,11 @@ type Configer[T Object] struct {
 	encoding encoding
 }
 
-// NewConfiger creates a new Configer.
+// New creates a new Configer.
 //
 // It binds the configuration it reads to the provided config object.
-// encoding is the encoding used to decode and encode the config.
-func NewConfiger[T Object](config *T, encoding encoding) *Configer[T] {
+// The encoding parameter specifies the encoding to use for marshaling/unmarshalling.
+func New[T Object](config *T, encoding encoding) *Configer[T] {
 	return &Configer[T]{
 		Config:   config,
 		encoding: encoding,
