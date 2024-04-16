@@ -352,4 +352,5 @@ require (
 
 ## License
 
-MIT License, Copyright (c) 2023-present CDFMLR
+This project is dual-licensed under Apache 2.0 and MIT terms.
+Copyright (c) 2023-present CDFMLR
