@@ -2,6 +2,7 @@ package config
 
 import (
 	"bytes"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -126,4 +127,102 @@ func TestConfiger_Write(t *testing.T) {
 
 		t.Log(buf.String())
 	}
+}
+
+// A simple example to of reading a TOML configuration.
+func ExampleConfiger_Read() {
+	var Config struct {
+		Version     string
+		HTTPService struct {
+			ListenAddr string
+			Timeout    time.Duration
+		}
+		Log struct {
+			Level int
+			File  string
+		}
+		BackendServices []struct {
+			Addr   string
+			Labels map[string]string
+		}
+		DB struct {
+			URL  string
+			Auth struct{ User, Password string }
+		}
+	}
+
+	tomlData := `
+version = "1.0.0"
+HTTPService = { ListenAddr = ":8080", Timeout = "5s" }
+
+[Log]
+Level = 2
+File = "app.log"
+
+[[BackendServices]]
+Addr = "https://backend1"
+Labels = { env = "dev" }
+
+[[BackendServices]]
+Addr = "https://backend2"
+Labels = { env = "prod", region = "us" }
+
+[[BackendServices]]
+Addr = "https://backend3"
+[BackendServices.Labels]
+env = "prod"
+region = "eu"
+disabled = "true"
+
+[DB]
+URL = "mysql://localhost:3306"
+
+[DB.Auth]
+User = "root"
+Password = "pswd123"
+`
+
+	configer := NewConfiger(&Config, TOML)
+
+	if err := configer.Read(strings.NewReader(tomlData)); err != nil {
+		panic(err)
+	}
+
+	fmt.Println(
+		Config.Version,
+		Config.HTTPService.Timeout,
+		len(Config.BackendServices),
+		Config.BackendServices[len(Config.BackendServices)-1].Labels["region"],
+		Config.DB.Auth.User)
+
+	// Output:
+	// 1.0.0 5s 3 eu root
+}
+
+// A simple example to of writing a JSON configuration.
+func ExampleConfiger_Write() {
+	var Config = struct {
+		Version string
+		Labels  map[string]string `json:"labels"`
+		Comment string            `json:",omitempty"`
+	}{
+		Version: "1.0.0",
+		Labels: map[string]string{
+			"env":      "dev",
+			"disabled": "true",
+		},
+	}
+
+	configer := NewConfiger(&Config, JSON)
+
+	var buf bytes.Buffer
+
+	if err := configer.Write(&buf); err != nil {
+		panic(err)
+	}
+
+	fmt.Println(buf.String())
+
+	// Output:
+	// {"Version":"1.0.0","labels":{"disabled":"true","env":"dev"}}
 }
