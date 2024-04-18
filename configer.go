@@ -5,13 +5,14 @@ import (
 	"os"
 )
 
-// Object is a configuration definition.
+// Configuration is a configuration definition.
 //
-// Configer binds the configuration to this object.
+// Configer binds the configuration it reads to a Configuration object.
+// Or it serializes the Configuration object to write it to a file.
 //
-// Any type can be used as a configuration object as long as it is serializable.
-// It is typically a struct.
-type Object = any
+// Any type can be used as a Configuration as long as it is serializable.
+// It is recommended to use a struct type to represent the configuration.
+type Configuration = any
 
 // Configer is a generic configuration reader and writer.
 //
@@ -20,8 +21,17 @@ type Object = any
 //
 // It also comes with Write/WriteToFile methods to reverse the process:
 // it encodes the Config object and writes it to an io.Writer or file.
-type Configer[T Object] struct {
-	Config   *T
+//
+// The type parameter T is the configuration type.
+// Actually, It is not required introducing generics here, but if I am not
+// misunderstanding, a type parameter is helpful to keep the Config field type
+// without abstracting it to an interface.
+// (It's an impulsive decision made at the time of 1.18 release. Keeping it
+// for now, as it is at least harmless.)
+type Configer[T Configuration] struct {
+	// Config is a pointer to the configuration object.
+	Config *T
+	// encoding to use for marshaling/unmarshalling.
 	encoding encoding
 }
 
@@ -29,7 +39,7 @@ type Configer[T Object] struct {
 //
 // It binds the configuration it reads to the provided config object.
 // The encoding parameter specifies the encoding to use for marshaling/unmarshalling.
-func New[T Object](config *T, encoding encoding) *Configer[T] {
+func New[T Configuration](config *T, encoding encoding) *Configer[T] {
 	return &Configer[T]{
 		Config:   config,
 		encoding: encoding,
