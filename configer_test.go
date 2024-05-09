@@ -79,7 +79,7 @@ rating = 4
 
 func TestConfiger_Read(t *testing.T) {
 	for _, test := range []struct {
-		encoding encoding
+		encoding Encoding
 		data     string
 	}{
 		{YAML, testConfigYaml},
@@ -105,7 +105,7 @@ func TestConfiger_Read(t *testing.T) {
 
 func TestConfiger_Write(t *testing.T) {
 	for _, test := range []struct {
-		encoding encoding
+		encoding Encoding
 		data     string
 	}{
 		{YAML, testConfigYaml},
